@@ -19,7 +19,11 @@ public class PlayerController : MonoBehaviour
     private float SpeedMultiple = 1.0f;
     private bool isCrouching = false;
     private bool Sprinting = false;
-   
+    public bool inHand;
+    public Weapon _weaponInHand;
+    public Transform RightHand;
+    public Transform Inventory;
+
 
     void Start()
     {
@@ -29,11 +33,12 @@ public class PlayerController : MonoBehaviour
         _player = GetComponent<Player>();
         _camMovement = GetComponentInChildren<CameraMovement>();
         
+        
        
         
     }
    
-    void Update()
+    void Update() 
     {
     
         if (m_InputHandler.GetCrouchInputDown())
@@ -58,9 +63,15 @@ public class PlayerController : MonoBehaviour
         {
             _camMovement.Move(1.0f, false);
         }
-       
-    
-        Rotation();
+       if(_weaponInHand && m_InputHandler.GetAttackInput())
+        {
+            Attack();
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            SwitchWeapon();
+        }
+            Rotation();
         Move();
         Crouching();
     }
@@ -101,6 +112,49 @@ public class PlayerController : MonoBehaviour
         _characterController.SimpleMove(forward * (_player.Speed * SpeedMultiple));
     }
 
+    void Attack()
+    {
+        _camMovement.Shake(0.3f, 10.0f, 0.5f);
+        _weaponInHand.Attack();
+    }
+    public void SetWeaponInHand(Weapon weapon)
+    {
+        inHand = true;
+        if(inHand)
+        {
+            _weaponInHand = weapon;
+            _weaponInHand.PlayAnimationWeaponInHand();
+        }
+    }
+    void SwitchWeapon()
+    {
+        List<Weapon> weapons = _player.GetWeapons();
+        if(weapons.Count > 0)
+        {
+            
+            DeleteWeaponInHand();
+            int indexCurrentWeapon = weapons.IndexOf(_weaponInHand);
+            int indexNewWeapon;
+            
+            indexNewWeapon = indexCurrentWeapon + 1;
+            if (indexCurrentWeapon == weapons.Count - 1)
+            {
+                indexNewWeapon = 0;
+            }
+            weapons[indexNewWeapon].gameObject.SetActive(true);
+            SetWeaponInHand(weapons[indexNewWeapon]);
+
+        }
+    }
+    public bool GetWeaponInHand()
+    {
+        return inHand;
+    }
+    public void DeleteWeaponInHand()
+    {
+        _weaponInHand.gameObject.SetActive(false);
+    }
+
     void Crouching()
     {
         if (isCrouching)
@@ -117,4 +171,5 @@ public class PlayerController : MonoBehaviour
             Head.transform.localPosition = Vector3.up * HeightCharacterStanding * CameraHeightRatio;
         }
     }
+    
 }

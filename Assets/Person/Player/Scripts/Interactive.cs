@@ -41,15 +41,24 @@ public class Interactive : MonoBehaviour
     {
          Debug.DrawRay(_ray.origin, _ray.direction * _maxDistance, Color.green);
        
-        if (_hit.transform != null && _hit.transform.GetComponent<InteractiveItem>())
+        if (_hit.transform != null && _hit.transform.GetComponent<InteractiveItem>() && _hit.transform.GetComponent<InteractiveItem>().isInteractive)
             {
             ch.Interact(true);
-            if (_hit.transform.GetComponent<Door>())
+            if (m_InputHandler.GetInteractInput())
             {
-                if (m_InputHandler.GetInteractInput())
+                if (_hit.transform.GetComponent<Door>())
+                 {
+                _hit.transform.GetComponent<Door>().Open();
+                   
+                }
+
+             if(_hit.transform.GetComponent<Money>())
                 {
-                    _hit.transform.GetComponent<Door>().Open();
-                    Debug.Log("ÂÂ");
+                    _hit.transform.GetComponent<Money>().PickUpMoney();
+                }
+             if(_hit.transform.GetComponent<Weapon>())
+                {
+                    _hit.transform.GetComponent<Weapon>().PickUpWeapon();
                 }
             }
             }else

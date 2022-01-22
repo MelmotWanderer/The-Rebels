@@ -42,6 +42,7 @@ using UnityEngine;
 
        
         }
+ 
 
         public float GetLookInputsHorizontal()
         {
@@ -72,10 +73,13 @@ using UnityEngine;
                 return Input.GetButtonDown(GameConstants.k_ButtonNameInteract);
             }
 
-    
-    
 
-        public bool GetSprintInputHeld()
+        public bool GetAttackInput()
+            {
+                return Input.GetButtonDown(GameConstants.k_ButtonNameAttack);
+            }
+
+    public bool GetSprintInputHeld()
         {
          
                 return Input.GetButton(GameConstants.k_ButtonNameSprint);

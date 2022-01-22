@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractiveItem : MonoBehaviour
 {
-  
+    public bool isInteractive = true;
     void Start()
     {
         

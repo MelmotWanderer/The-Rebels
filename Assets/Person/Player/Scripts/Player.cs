@@ -4,33 +4,36 @@ using UnityEngine;
 
 public class Player : Person
 {
-    public int Soul { get; set; }
+    public int Soul;
+    public int Money;
     private bool recovery = false;
     public bool recoveryFirst = false;
-    [SerializeField] private UI canv;
     private float SpeedStaminaUp = 40.0f;
     private float SpeedStaminaDown = 20.0f;
-
+    
+ 
+    [SerializeField] private UI canv;
+    [SerializeField] private List<Weapon> weapons = new List<Weapon>();
+    void Awake()
+    {
+        GlobalEventManager.OnGetMoney.AddListener(ChangeCountMoney);
+        GlobalEventManager.OnGetWeapon.AddListener(GettingWeapon);
+    }
     void Start()
     {
         Speed = 4.0f;
         Stamina = 100.0f;
-        
+
     }
 
-
     void Update() {
-
-       
-            ChangeStamina();
-        
-              
-            
+        ChangeStamina();
     }
      public void Running()
     {
         Stamina -= SpeedStaminaUp * Time.deltaTime;
         
+
     }
  
     public void ChangeStamina()
@@ -58,5 +61,23 @@ public class Player : Person
 
 
     }
-   
+
+    public void ChangeCountMoney(int price)
+    {
+        Money += price;
+        canv.ChangeCountMoney(Money);
+
+    }
+    public void GettingWeapon(Weapon weapon)
+    {
+        
+        weapons.Add(weapon);
+    }
+    public List<Weapon> GetWeapons()
+    {
+      
+            return weapons;
+        
+      
+    }
 }

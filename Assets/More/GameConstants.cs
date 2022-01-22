@@ -12,4 +12,5 @@ public class GameConstants : MonoBehaviour
     public const string k_ButtonNameSprint = "Sprint";
     public const string k_ButtonNameCrouch = "Crouch";
     public const string k_ButtonNameInteract = "Interact";
+    public const string k_ButtonNameAttack = "Attack";
 }
